@@ -42,3 +42,44 @@ def select_red_flag(red_flag_id):
         'status': 204,
         'error': 'No such record'
     }), 200
+
+#create a red-flag
+@app.route('/api/v1/red-flags', methods=['POST'])
+def create_red_flag():
+    if not request.json:
+        return jsonify({
+            'status': 417,
+            'error': 'No request data, Provide incident details'
+        }), 417
+    incident_details = request.get_json()
+    if 'created_by' not in incident_details:
+        return jsonify({
+            'status': 403,
+            'error': 'We can\'t identify you, Provide your ID'
+        }), 403
+    
+    incident_title = incident_details.get("incident_title")
+    created_by = incident_details.get("created_by")
+    location = incident_details.get("location")
+    images = incident_details.get("images")
+    videos = incident_details.get("videos")
+    comment = incident_details.get("comment")
+
+    new_red_flag = Incident(
+        incident_details=incident_title,
+        created_by= created_by,
+        location= location,
+        images= images,
+        videos= videos,
+        comment= comment
+    )
+
+    red_flags_list.append(
+        new_red_flag.incident_struct('red-flag')
+    )
+    return jsonify({
+        'status': 201,
+        'data': [{
+            'message': 'Incident {} has been recorded'.format(new_red_flag.incident_id)
+        }]
+    }), 201

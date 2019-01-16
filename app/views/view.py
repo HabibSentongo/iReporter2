@@ -83,3 +83,33 @@ def create_red_flag():
             'message': 'Incident {} has been recorded'.format(new_red_flag.incident_id)
         }]
     }), 201
+
+#edit record location
+@app.route('/api/v1/red-flags/<int:red_flag_id>/location', methods=['PATCH'])
+def edit_location(red_flag_id):
+    if not request.json:
+        return jsonify({
+            'status': 417,
+            'error': 'No request data, Provide new location'
+        }), 417
+    new_location = request.get_json()
+    if 'location' not in new_location:
+        return jsonify({
+            'status': 412,
+            'error': 'New info missing, Provide new location'
+        }), 417
+
+    for record in red_flags_list:
+        if record['incident_id'] == red_flag_id:
+            record['location'] = new_location['location']
+            return jsonify({
+                'status': 202,
+                'data': [{
+                    'message': 'Location of record {} updated to {}'.format(red_flag_id, new_location['location'])
+                }]
+            }), 202
+
+    return jsonify({
+        'status': 404,
+        'error': 'Red-flag record does\'t exist'
+    }), 404

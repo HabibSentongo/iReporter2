@@ -15,3 +15,17 @@ def home():
     '06 : DELETE /api/v1/red-flags/<red_flag_id>']
     })
 
+#fetch all red-flags
+@app.route('/api/v1/red-flags', methods=['GET'])
+def all_red_flags():
+    if len(red_flags_list) > 0:
+        return jsonify({
+            'status': 200,
+            'data': red_flags_list
+        }), 200
+
+    return jsonify({
+        'status': 204,
+        'error': 'No records yet!'
+    }), 200
+

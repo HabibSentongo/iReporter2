@@ -113,3 +113,33 @@ def edit_location(red_flag_id):
         'status': 404,
         'error': 'Red-flag record does\'t exist'
     }), 404
+
+#edit record comment
+@app.route('/api/v1/red-flags/<int:red_flag_id>/comment', methods=['PATCH'])
+def edit_comment(red_flag_id):
+    if not request.json:
+        return jsonify({
+            'status': 417,
+            'error': 'No request data, Provide new comment'
+        }), 417
+    new_comment = request.get_json()
+    if 'comment' not in new_comment:
+        return jsonify({
+            'status': 412,
+            'error': 'New info missing, Provide new comment'
+        }), 417
+
+    for record in red_flags_list:
+        if record['incident_id'] == red_flag_id:
+            record['comment'] = new_comment['comment']
+            return jsonify({
+                'status': 202,
+                'data': [{
+                    'message': 'Comment of record {} updated to {}'.format(red_flag_id, new_comment['comment'])
+                }]
+            }), 202
+
+    return jsonify({
+        'status': 404,
+        'error': 'Red-flag record does\'t exist'
+    }), 404

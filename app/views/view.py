@@ -143,3 +143,21 @@ def edit_comment(red_flag_id):
         'status': 404,
         'error': 'Red-flag record does\'t exist'
     }), 404
+
+#delete a record
+@app.route('/api/v1/red-flags/<int:red_flag_id>', methods=['DELETE'])
+def delete_record(red_flag_id):
+    for record in red_flags_list:
+        if record['incident_id'] == red_flag_id:
+            red_flags_list.remove(record)
+            return jsonify({
+                'status': 200,
+                'data': [{
+                    'message': 'Record {} deleted successfully'.format(record['incident_id'])
+                }]
+            }), 200
+
+    return jsonify({
+        'status': 404,
+        'error': 'No such record'
+    }), 404

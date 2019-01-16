@@ -29,3 +29,16 @@ def all_red_flags():
         'error': 'No records yet!'
     }), 200
 
+#fetch specific red-flag
+@app.route('/api/v1/red-flags/<int:red_flag_id>', methods=['GET'])
+def select_red_flag(red_flag_id):
+    for record in red_flags_list:
+        if record['incident_id'] == red_flag_id:
+            return jsonify({
+                'status': 302,
+                'data': [record]
+            }),302
+    return jsonify({
+        'status': 204,
+        'error': 'No such record'
+    }), 200

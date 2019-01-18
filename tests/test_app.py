@@ -164,6 +164,4 @@ class TestApi(unittest.TestCase):
         self.assertEqual(response['status'], 404)
         self.assertEqual(response['error'], 'No such record')
 
-    def test_model
-
     

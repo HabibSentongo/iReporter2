@@ -44,21 +44,21 @@ def all_red_flags():
         'error': 'No records yet!'
     }), 404
 
-# #fetch specific red-flag
-# @app.route('/api/v1/red-flags/<int:red_flag_id>', methods=['GET'])
-# def select_red_flag(red_flag_id):
-#     get_specific = "SELECT * FROM red_flags WHERE incident_id = {}".format(red_flag_id)
-#     db_obj.my_cursor.execute(get_specific)
-#     specific_redflag = db_obj.my_cursor.fetchall()
-#     if specific_redflag:
-#         return jsonify({
-#             'status': 302,
-#             'data': specific_redflag
-#         }),302
-#     return jsonify({
-#         'status': 404,
-#         'error': 'No such record'
-#     }), 404
+#fetch specific red-flag
+@app.route('/api/v1/red-flags/<int:red_flag_id>', methods=['GET'])
+def select_red_flag(red_flag_id):
+    get_specific = "SELECT * FROM red_flags WHERE incident_id = {}".format(red_flag_id)
+    db_obj.my_cursor.execute(get_specific)
+    specific_redflag = db_obj.my_cursor.fetchall()
+    if specific_redflag:
+        return jsonify({
+            'status': 302,
+            'data': specific_redflag
+        }),302
+    return jsonify({
+        'status': 404,
+        'error': 'No such record'
+    }), 404
 
 # #create a red-flag
 # @app.route('/api/v1/red-flags', methods=['POST'])

@@ -22,7 +22,7 @@ class DBmigrate:
         red_flag_table = "CREATE TABLE IF NOT EXISTS red_flags(\
         incident_id serial PRIMARY KEY NOT NULL,\
         comment VARCHAR (50) NOT NULL,\
-        incident_type VARCHAR (10) NOT NULL,\
+        incident_type VARCHAR (15) DEFAULT 'red-flag',\
         incident_status VARCHAR (10) NOT NULL DEFAULT 'draft',\
         created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\
         created_by INT NOT NULL,\
@@ -33,7 +33,7 @@ class DBmigrate:
         intervention_table = "CREATE TABLE IF NOT EXISTS incidents(\
         incident_id serial PRIMARY KEY NOT NULL,\
         comment VARCHAR (50) NOT NULL,\
-        incident_type VARCHAR (10) NOT NULL,\
+        incident_type VARCHAR (15) DEFAULT 'intervention',\
         incident_status VARCHAR (10) NOT NULL DEFAULT 'draft',\
         created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\
         created_by INT NOT NULL,\

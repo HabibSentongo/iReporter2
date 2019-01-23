@@ -2,9 +2,10 @@ import psycopg2
 import os
 #from config import app_config_dict
 from flask import current_app as app
+from psycopg2.extras import RealDictCursor
 
 
-class dbMigrate:
+class DBmigrate:
     def __init__(self):
         self.db_name = 'iReporter_db'
         self.user_name = 'postgres'
@@ -14,10 +15,11 @@ class dbMigrate:
         self.db_connect = psycopg2.connect(
             database=self.db_name, user=self.user_name, password=self.user_password, host=self.host, port=self.port)
         self.db_connect.autocommit = True
-        self.my_cursor = self.db_connect.cursor()
+        self.my_cursor = self.db_connect.cursor(cursor_factory = RealDictCursor)
+        #self.con_close = self.db_connect.close()
 
-    #def create_tables(self):
-        self.red_flag_table = "CREATE TABLE IF NOT EXISTS red_flags(\
+    def create_tables(self):
+        red_flag_table = "CREATE TABLE IF NOT EXISTS red_flags(\
         incident_id serial PRIMARY KEY NOT NULL,\
         comment VARCHAR (50) NOT NULL,\
         incident_type VARCHAR (10) NOT NULL,\
@@ -29,27 +31,36 @@ class dbMigrate:
         videos VARCHAR (20));"
 
         intervention_table = "CREATE TABLE IF NOT EXISTS incidents(\
-        incident_id serial PRIMARY KEY,\
-        comment varchar(50) NOT NULL,\
-        incident_type varchar(10) NOT NULL,\
-        incident_status varchar(10) NOT NUL DEFAULT 'draft',\
-        created_on TIMESTAMP NOT NUL DEFAULT CURRENT_TIMESTAMP,\
-        created_by int NOT NULL FOREIGN KEY REFERENCES users(user_id),\
-        location varchar(20),\
-        images varchar(20),\
-        videos varchar(20));"
+        incident_id serial PRIMARY KEY NOT NULL,\
+        comment VARCHAR (50) NOT NULL,\
+        incident_type VARCHAR (10) NOT NULL,\
+        incident_status VARCHAR (10) NOT NULL DEFAULT 'draft',\
+        created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\
+        created_by INT NOT NULL,\
+        location VARCHAR (20),\
+        images VARCHAR (20),\
+        videos VARCHAR (20));"
 
         users_table = "CREATE TABLE IF NOT EXISTS users(\
         user_id serial PRIMARY KEY,\
-        firstname varchar(20) NOT NULL,\
-        lastname varchar(20) NOT NULL,\
-        othernames varchar(20),\
-        email varchar(30) NOT NUL,\
-        phoneNumber varchar(15),\
-        username varchar(10) NOT NUL,\
-        registered TIMESTAMP NOT NUL DEFAULT CURRENT_TIMESTAMP,\
+        firstname VARCHAR(20) NOT NULL,\
+        lastname VARCHAR(20) NOT NULL,\
+        othernames VARCHAR(20),\
+        email VARCHAR(30) NOT NULL,\
+        phoneNumber VARCHAR(15),\
+        username VARCHAR(10) NOT NULL,\
+        password TEXT NOT NULL,\
+        registered TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\
         isAdmin boolean DEFAULT False);"
 
-king = dbMigrate()
-king.db_connect
-king.my_cursor.execute(king.red_flag_table)
+        self.db_connect
+        self.my_cursor.execute(users_table)
+        self.my_cursor.execute(red_flag_table)
+        self.my_cursor.execute(intervention_table)
+
+    def drop_table(self,table_name):
+        dropper = "DROP TABLE IF EXISTS {}".format(table_name)
+        self.my_cursor.execute(dropper)
+
+    
+

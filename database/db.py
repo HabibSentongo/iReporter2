@@ -30,7 +30,7 @@ class DBmigrate:
         images VARCHAR (20),\
         videos VARCHAR (20));"
 
-        intervention_table = "CREATE TABLE IF NOT EXISTS incidents(\
+        intervention_table = "CREATE TABLE IF NOT EXISTS interventions(\
         incident_id serial PRIMARY KEY NOT NULL,\
         comment VARCHAR (50) NOT NULL,\
         incident_type VARCHAR (15) DEFAULT 'intervention',\

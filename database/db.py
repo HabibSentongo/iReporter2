@@ -1,13 +1,17 @@
 import psycopg2
 import os
-#from config import app_config_dict
 from flask import current_app as app
 from psycopg2.extras import RealDictCursor
 
 
 class DBmigrate:
     def __init__(self):
-        self.db_name = 'iReporter_db'
+
+        if os.getenv('DB_NAME') == 'test_iReporter_db':
+            self.db_name = 'test_iReporter_db'
+        else:
+            self.db_name = 'iReporter_db'
+        print(self.db_name)
         self.user_name = 'postgres'
         self.user_password = 'root'
         self.host = '127.0.0.1'

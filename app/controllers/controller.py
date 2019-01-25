@@ -4,7 +4,7 @@ from ..models.incident_model import Static_strings
 
 db_obj = DBmigrate()
 db_obj.create_tables()
-class All_fns:
+class Endpoints_functions:
     def home(self):
         return jsonify({'message': ['Welcome to Sentongo\'s iReporter!',
                                     'Endpoints',
@@ -85,15 +85,15 @@ class All_fns:
     def edit_column(self, table_name, edit_column, record_id):
         if not request.json:
             return jsonify({
-                'status': 404,
+                'status': 400,
                 'error': Static_strings.error_bad_data
-            }), 404
+            }), 400
         new_column_data = request.get_json()
         if edit_column not in new_column_data:
             return jsonify({
-                'status': 404,
+                'status': 400,
                 'error': Static_strings.error_bad_data
-            }), 404
+            }), 400
 
         db_obj.my_cursor.execute(Static_strings.selector.format(record_id, table_name, record_id))
         hold_checked = db_obj.my_cursor.fetchone()
@@ -106,7 +106,7 @@ class All_fns:
                 'status': 200,
                 'data': [{
                     'ID': its_id['incident_id'],
-                    'message': 'Updated record'
+                    'message': Static_strings.msg_updated
                 }]
             }), 200
 
@@ -127,7 +127,7 @@ class All_fns:
                 'status': 200,
                 'data': [{
                     'ID': its_id['incident_id'],
-                    'message': 'record has been deleted'
+                    'message': Static_strings.msg_deleted
                 }]
             }), 200
 

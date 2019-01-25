@@ -14,9 +14,9 @@ install:
   - "pip install -r requirements.txt"
 
 before_script:
-  - "psql -c 'create ' -U postgres"
+  - "psql -c 'create database test_iReporter_db;' -U postgres"
 script:
-  - python3 -m pytest --cov=app/
+  - python3 -m pytest --cov
 
 after_success:
   - coveralls 
